@@ -8,8 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.surajit.journalApp.entity.JournalEntry;
-import dev.surajit.journalApp.service.JournalEntryService;
+import dev.surajit.journalApp.entity.JournalEntity;
+import dev.surajit.journalApp.service.JournalService;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +24,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/v1/journal")
-public class JournalEntryController {
+public class JournalController {
 //    create object of JournalEntryService class
     @Autowired
-    private JournalEntryService journalEntryService;
+    private JournalService journalEntryService;
 
 //    get all journals
     @GetMapping
-    public ResponseEntity<List<JournalEntry>> getAll() {
-        List<JournalEntry> all = journalEntryService.getAllEntries();
+    public ResponseEntity<List<JournalEntity>> getAll() {
+        List<JournalEntity> all = journalEntryService.getAllEntries();
 
         if (all != null && !all.isEmpty()) {
             return new ResponseEntity<>(all, HttpStatus.OK);
@@ -43,8 +43,8 @@ public class JournalEntryController {
 
     // get one journal by id
     @GetMapping("id/{id}")
-    public ResponseEntity<JournalEntry> getById(@PathVariable ObjectId id) {
-        Optional<JournalEntry> journal = journalEntryService.findEntryById(id);
+    public ResponseEntity<JournalEntity> getById(@PathVariable ObjectId id) {
+        Optional<JournalEntity> journal = journalEntryService.findEntryById(id);
 
         if (journal.isPresent()) {
             return new ResponseEntity<>(journal.get(), HttpStatus.OK);
@@ -55,7 +55,7 @@ public class JournalEntryController {
 
     // create a journal
     @PostMapping
-    public ResponseEntity<JournalEntry> create(@RequestBody JournalEntry myEntry) {
+    public ResponseEntity<JournalEntity> create(@RequestBody JournalEntity myEntry) {
         try {
             journalEntryService.saveEntry(myEntry);
             return new ResponseEntity<>(myEntry, HttpStatus.CREATED);
@@ -74,8 +74,8 @@ public class JournalEntryController {
 
 //    update a journal by id
     @PutMapping("id/{id}")
-    public ResponseEntity<JournalEntry> updateById(@PathVariable ObjectId id, @RequestBody JournalEntry newEntry) {
-        JournalEntry oldEntry = journalEntryService.findEntryById(id).orElse(null);
+    public ResponseEntity<JournalEntity> updateById(@PathVariable ObjectId id, @RequestBody JournalEntity newEntry) {
+        JournalEntity oldEntry = journalEntryService.findEntryById(id).orElse(null);
 
         // putting the new values in the old entry if they are not null or empty, otherwise keeping the old values
         if (oldEntry != null) {

@@ -8,16 +8,16 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import dev.surajit.journalApp.entity.JournalEntry;
-import dev.surajit.journalApp.repository.JournalEntryRepository;
+import dev.surajit.journalApp.entity.JournalEntity;
+import dev.surajit.journalApp.repository.JournalRepository;
 
 @Component
-public class JournalEntryService {
+public class JournalService {
 
     @Autowired
-    private JournalEntryRepository journalEntryRepository;
+    private JournalRepository journalEntryRepository;
 
-    public void saveEntry(JournalEntry journalEntry) {
+    public void saveEntry(JournalEntity journalEntry) {
         try {
             journalEntry.setDate(LocalDateTime.now());
             journalEntryRepository.save(journalEntry);
@@ -26,11 +26,11 @@ public class JournalEntryService {
         }
     }
 
-    public List<JournalEntry> getAllEntries() {
+    public List<JournalEntity> getAllEntries() {
         return journalEntryRepository.findAll();
     }
 
-    public Optional<JournalEntry> findEntryById(ObjectId id) {
+    public Optional<JournalEntity> findEntryById(ObjectId id) {
         return journalEntryRepository.findById(id);
     }
 
@@ -38,7 +38,7 @@ public class JournalEntryService {
         journalEntryRepository.deleteById(id);
     }
 
-    public  void updateEntryById(JournalEntry newEntry) {
+    public  void updateEntryById(JournalEntity newEntry) {
         journalEntryRepository.save(newEntry);
     }
 }
