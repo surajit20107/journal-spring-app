@@ -1,5 +1,6 @@
 package dev.surajit.journalApp.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,8 +17,13 @@ public class JournalEntryService {
     @Autowired
     private JournalEntryRepository journalEntryRepository;
 
-    public void saveEntry(JournalEntry entry) {
-        journalEntryRepository.save(entry);
+    public void saveEntry(JournalEntry journalEntry) {
+        try {
+            journalEntry.setDate(LocalDateTime.now());
+            journalEntryRepository.save(journalEntry);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public List<JournalEntry> getAllEntries() {

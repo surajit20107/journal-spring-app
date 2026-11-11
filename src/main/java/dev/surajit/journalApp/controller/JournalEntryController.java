@@ -1,6 +1,5 @@
 package dev.surajit.journalApp.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +41,7 @@ public class JournalEntryController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-//    get one journal by id
+    // get one journal by id
     @GetMapping("id/{id}")
     public ResponseEntity<JournalEntry> getById(@PathVariable ObjectId id) {
         Optional<JournalEntry> journal = journalEntryService.findEntryById(id);
@@ -54,11 +53,10 @@ public class JournalEntryController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-//    create a journal
+    // create a journal
     @PostMapping
     public ResponseEntity<JournalEntry> create(@RequestBody JournalEntry myEntry) {
         try {
-            myEntry.setDate(LocalDateTime.now());
             journalEntryService.saveEntry(myEntry);
             return new ResponseEntity<>(myEntry, HttpStatus.CREATED);
         } catch (Exception e) {
