@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import dev.surajit.journalApp.entity.JournalEntity;
+import dev.surajit.journalApp.entity.UserEntity;
 import dev.surajit.journalApp.repository.JournalRepository;
 
 @Component
@@ -17,10 +18,16 @@ public class JournalService {
     @Autowired
     private JournalRepository journalEntryRepository;
 
-    public void saveEntry(JournalEntity journalEntry) {
+    @Autowired 
+    private UserService userService;
+
+    public void saveEntry(JournalEntity journalEntry, String username) {
         try {
+            UserEntity user = userService.findByUserName(username);
             journalEntry.setDate(LocalDateTime.now());
-            journalEntryRepository.save(journalEntry);
+            JournalEntity saved = journalEntryRepository.save(journalEntry);
+            user.getJournalEntries().add(saved);
+            userService.saveUser(user);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
