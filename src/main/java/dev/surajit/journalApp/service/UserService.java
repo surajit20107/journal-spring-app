@@ -18,7 +18,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public void createUser(UserEntity user) {
+    public void saveUser(UserEntity user) {
         userRepository.save(user);
     }
 
@@ -28,6 +28,10 @@ public class UserService {
 
     public  Optional<UserEntity> findUserById(ObjectId id) {
         return userRepository.findById(id);
+    }
+
+    public UserEntity findByUserName(String username) {
+        return userRepository.findByUsername(username);
     }
 
     public  void deleteUserById(ObjectId id) {

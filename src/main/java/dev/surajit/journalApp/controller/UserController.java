@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +33,7 @@ public class UserController {
 
     @PostMapping 
     public ResponseEntity<UserEntity> createNewUser(@RequestBody UserEntity user) {
-        userService.createUser(user);
+        userService.saveUser(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -47,9 +48,22 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    public ResponseEntity<Boolean> deleteUserById(@PathVariable ObjectId id) {
-        userService.deleteUserById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping
+    public ResponseEntity<?> updateUser(@RequestBody UserEntity user) {
+        UserEntity userInDb = userService.findByUserName(user.getUsername());
+
+        if (userInDb != null) {
+            userInDb.setUsername(user.getUsername());
+            userInDb.setPassword(user.getPassword());
+            userService.saveUser(userInDb);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    // public ResponseEntity<Boolean> deleteUserById(@PathVariable ObjectId id) {
+    //     userService.deleteUserById(id);
+    //     return new ResponseEntity<>(HttpStatus.OK);
+    // }
 
 }
