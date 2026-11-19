@@ -27,14 +27,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/api/v1/journal")
 public class JournalController {
-//    create object of JournalEntryService class
+
     @Autowired
     private JournalService journalEntryService;
 
     @Autowired 
     private UserService userService;
 
-//    get all journals
+    // get all journals of a user
     @GetMapping("/{username}")
     public ResponseEntity<List<JournalEntity>> getAllJournelEntriesOfUser(@PathVariable String username) {
         UserEntity user = userService.findByUserName(username);
@@ -72,14 +72,14 @@ public class JournalController {
         }
     }
 
-//    deleteing a journal by id
+    // deleteing a journal by id
     @DeleteMapping("id/{id}")
     public ResponseEntity<?> deleteBYId(@PathVariable ObjectId id) {
         journalEntryService.deleteEntryById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-//    update a journal by id
+    // update a journal by id
     @PutMapping("id/{id}")
     public ResponseEntity<JournalEntity> updateById(@PathVariable ObjectId id, @RequestBody JournalEntity newEntry) {
         // JournalEntity oldEntry = journalEntryService.findEntryById(id).orElse(null);
