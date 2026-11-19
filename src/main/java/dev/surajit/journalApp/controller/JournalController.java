@@ -49,7 +49,7 @@ public class JournalController {
     }
 
     // get one journal by id
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<JournalEntity> getById(@PathVariable ObjectId id) {
         Optional<JournalEntity> journal = journalEntryService.findEntryById(id);
 
@@ -73,14 +73,14 @@ public class JournalController {
     }
 
     // deleteing a journal by id
-    @DeleteMapping("id/{id}")
+    @DeleteMapping("/id/{id}")
     public ResponseEntity<?> deleteBYId(@PathVariable ObjectId id) {
         journalEntryService.deleteEntryById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     // update a journal by id
-    @PutMapping("id/{id}")
+    @PutMapping("/id/{id}")
     public ResponseEntity<JournalEntity> updateById(@PathVariable ObjectId id, @RequestBody JournalEntity newEntry) {
         // JournalEntity oldEntry = journalEntryService.findEntryById(id).orElse(null);
 
