@@ -73,24 +73,24 @@ public class JournalController {
     }
 
     // deleteing a journal by id
-    @DeleteMapping("/id/{id}")
-    public ResponseEntity<?> deleteBYId(@PathVariable ObjectId id) {
-        journalEntryService.deleteEntryById(id);
+    @DeleteMapping("/{username}/{id}")
+    public ResponseEntity<?> deleteBYId(@PathVariable ObjectId id, @PathVariable String username) {
+        journalEntryService.deleteEntryById(id, username);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     // update a journal by id
-    @PutMapping("/id/{id}")
-    public ResponseEntity<JournalEntity> updateById(@PathVariable ObjectId id, @RequestBody JournalEntity newEntry) {
-        // JournalEntity oldEntry = journalEntryService.findEntryById(id).orElse(null);
+    @PutMapping("/{username}/{id}")
+    public ResponseEntity<JournalEntity> updateById(@PathVariable ObjectId id, String username, @RequestBody JournalEntity newEntry) {
+        JournalEntity oldEntry = journalEntryService.findEntryById(id).orElse(null);
 
-        // // putting the new values in the old entry if they are not null or empty, otherwise keeping the old values
-        // if (oldEntry != null) {
-        //     oldEntry.setTitle(newEntry.getTitle() != null && !newEntry.getTitle().equals("") ? newEntry.getTitle(): oldEntry.getTitle());
-        //     oldEntry.setContent(newEntry.getContent() != null && !newEntry.getContent().equals("") ? newEntry.getContent() : oldEntry.getContent());
-        //     journalEntryService.updateEntryById(oldEntry);
-        //     return new ResponseEntity<>(oldEntry, HttpStatus.OK);
-        // }
+        // putting the new values in the old entry if they are not null or empty, otherwise keeping the old values
+        if (oldEntry != null) {
+            oldEntry.setTitle(newEntry.getTitle() != null && !newEntry.getTitle().equals("") ? newEntry.getTitle(): oldEntry.getTitle());
+            oldEntry.setContent(newEntry.getContent() != null && !newEntry.getContent().equals("") ? newEntry.getContent() : oldEntry.getContent());
+            journalEntryService.updateEntryById(oldEntry);
+            return new ResponseEntity<>(oldEntry, HttpStatus.OK);
+        }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
