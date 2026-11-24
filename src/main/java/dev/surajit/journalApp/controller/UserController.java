@@ -7,6 +7,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,9 @@ public class UserController {
     @Autowired 
     private UserService userService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     @GetMapping
     public ResponseEntity<List<UserEntity>> getAllUsers() {
@@ -34,6 +38,7 @@ public class UserController {
 
     @PostMapping 
     public ResponseEntity<UserEntity> createNewUser(@RequestBody UserEntity user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.saveUser(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -55,7 +60,7 @@ public class UserController {
 
         if (userInDb != null) {
             userInDb.setUsername(user.getUsername());
-            userInDb.setPassword(user.getPassword());
+            userInDb.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.saveUser(userInDb);
         }
 
